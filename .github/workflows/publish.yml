@@ -1,0 +1,30 @@
+name: Publish to JSR
+
+on:
+  push:
+    # Trigger workflow only when a push happen to main branch
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Run tests
+        run: deno test -A
+
+      - name: Publish with Deno
+        run: deno publish
