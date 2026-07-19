@@ -1,6 +1,10 @@
 {
+  "name": "@ingenium/ingrouter",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": "./src/index.ts",
   "tasks": {
-    "test": "deno test --watch"
+    "test": "deno test -A"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"
