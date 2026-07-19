@@ -245,3 +245,5 @@ Prints a formatted table of all routes to stdout.
 ## License
 
 MIT
+
+This project is open source. Maintained by [Ingenium Solutions](https://ingsolutions.xyz);
