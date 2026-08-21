@@ -17,13 +17,13 @@ chains, and nested sub-routers (mounting) with a single shared config.
 Published on JSR. Import it with the JSR URL or your preferred registry alias:
 
 ```ts
-import Router from "jsr:@your-scope/ing-router@1";
+import { Router } from "@ingenium/ingrouter";
 ```
 
 ## Quick start
 
 ```ts
-import Router from "jsr:@your-scope/ing-router@1";
+import { Router } from "@ingenium/ingrouter";
 
 const app = new Router({ routerType: "array" });
 
@@ -116,6 +116,30 @@ app.add("GET", "/secret", auth, (req, ctx) => {
 
 A middleware may short-circuit the chain by returning a `Response` without
 calling `next()`.
+
+## Serving alongside static files
+
+IngRouter gets confused when being used alongside static files,
+so make sure to add a check for if request is GET or HEAD. Otherwise,
+IngRouter may throw errors.
+
+```ts
+Deno.serve({ port: port || 3000 }, async (req: Request) => {
+  const { pathname } = new URL(req.url);
+  console.log("Checking router for: ", pathname);
+
+  // Only static file serving for GET / HEAD requests
+  if (req.method === "GET" || req.method === "HEAD") {
+    const staticResponse = await serveDir(req, {
+      fsRoot: "dist",
+      quiet: true,
+    });
+    if (staticResponse.status !== 404) return staticResponse;
+  }
+
+  return await app.handle(req, pathname);
+});
+```
 
 ## Nested routing (mounting)
 
@@ -245,3 +269,5 @@ Prints a formatted table of all routes to stdout.
 ## License
 
 MIT
+
+This project is open source. Maintained by [Ingenium Solutions](https://ingsolutions.xyz);
